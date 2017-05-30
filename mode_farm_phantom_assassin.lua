@@ -4,5 +4,5 @@ function GetDesire()
 	then
 		return 0.1;
 	end;
-	return 0.7;
+	return 0.75;
 end;

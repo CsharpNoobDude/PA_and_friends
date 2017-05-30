@@ -24,7 +24,7 @@ function AbilityUsageThink()
 		return;
 	end;
 	
-	if ( castPhantomStrikeTarget > castStiflingDaggerDesire )
+	if ( castPhantomStrikeDesire > 0 )
 	then
 		npcBot:Action_UseAbilityOnEntity(abilityPhantomStrike, castPhantomStrikeTarget );
 		return;
@@ -44,7 +44,6 @@ end;
 
 ----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------------------------
 
 function ConsiderStiflingDagger()
 
@@ -69,27 +68,34 @@ function ConsiderStiflingDagger()
 	--while laning or farming
 	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN)
 	then
-		if ( creepHealth*1.05 < nDamage )
+		if ( creepHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget(WeakestCreep) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
-		return BOT_ACTION_DESIRE_LOW, WeakestEnemy;
+		if ( CanCastStiflingDaggerOnTarget(WeakestEnemy) )
+		then
+			return BOT_ACTION_DESIRE_LOW, WeakestEnemy;
+		end;
 	end;
 	
 	--while fighting
 	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
 	then
-		if ( HeroHealth*1.05 < nDamage )
+		if ( HeroHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget )
 		then
 			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
 		end;
-		if ( creepHealth*1.05 < nDamage )
+		if ( creepHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget(WeakestCreep) )
 		then
 			BOT_ACTION_DESIRE_LOW, WeakestCreep;
 		end;
-		return BOT_ACTION_DESIRE_MEDIUM, WeakestEnemy;
+		if ( CanCastStiflingDaggerOnTarget(WeakestEnemy) )
+		then
+			return BOT_ACTION_DESIRE_MEDIUM, WeakestEnemy;
+		end;
 	end;
 	
+	return BOT_ACTION_DESIRE_NONE, nil;
 end;
 
 
@@ -114,14 +120,13 @@ function ConsiderPhantomStrike()
 	local WeakestEnemy,HeroHealth=logic.GetWeakestUnit(enemys);
 	
 	--while laning or farming
-	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN)
+	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN )
 	then
-		if ( creepHealth*1.05 < nDamage )
+		if ( creepHealth*1.05 < nDamage and CanCastPhantomStrikeOnTarget(WeakestCreep) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
 		--return BOT_ACTION_DESIRE_LOW, WeakestEnemy;
-		return BOT_ACTION_DESIRE_NONE, nil;
 	end;
 	
 	--while fighting
@@ -134,4 +139,5 @@ function ConsiderPhantomStrike()
 		--return BOT_ACTION_DESIRE_MEDIUM, WeakestEnemy;
 	--end;
 	
+	return BOT_ACTION_DESIRE_NONE, nil;
 end;

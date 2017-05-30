@@ -4,4 +4,4 @@ Phantom Assassin:
 -Use Phantom strike to escape;
 -add mana checks;
 -laning until bfury
--farming until desolator
+-jungling / farming priority
