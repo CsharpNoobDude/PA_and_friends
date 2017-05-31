@@ -16,7 +16,10 @@ function AbilityUsageThink()
 		return nil;
 	end;
 	
-	itemAbilities.courier();
+	if ( utility.CheckItemByName( "item_courier" ) )
+	then
+		itemAbilities.courier();
+	end;
 end;
 
 ----------------------------------------------------------------------------------------------------
