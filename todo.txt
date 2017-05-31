@@ -1,3 +1,4 @@
 Phantom Assassin:
 -laning / change lane if enemy team pushing
 -jungling
+-secret shop

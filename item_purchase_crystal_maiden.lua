@@ -37,6 +37,7 @@ local ItemsToBuy = {
 function ItemPurchaseThink()
 
 	local npcBot = GetBot();
+	secretShopRadiant = Vector(-4472, 1328);
 
 	if ( #ItemsToBuy == 0 )
 	then
@@ -54,7 +55,9 @@ function ItemPurchaseThink()
         --print( "second if is called" );
         if ( IsItemPurchasedFromSecretShop( sNextItem ) )
         then
-            --do smthg
+            npcBot:ActionPush_MoveToLocation( secretShopRadiant );
+			npcBot:ActionImmediate_PurchaseItem( sNextItem );
+			table.remove( ItemsToBuy, 1 );
         else
 			npcBot:ActionImmediate_PurchaseItem( sNextItem );
 			table.remove( ItemsToBuy, 1 );
