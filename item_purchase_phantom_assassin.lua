@@ -56,11 +56,10 @@ function ItemPurchaseThink()
         then
             --do smthg
         else
-		npcBot:ActionImmediate_PurchaseItem( sNextItem );
-		table.remove( ItemsToBuy, 1 );
+			npcBot:ActionImmediate_PurchaseItem( sNextItem );
+			table.remove( ItemsToBuy, 1 );
         end;
 	end;
-end;
 	
 	--GeneralPurchase();
 end;
