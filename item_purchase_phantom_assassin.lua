@@ -39,7 +39,30 @@ local ItemsToBuy = {
 
 function ItemPurchaseThink()
 
-	utility.PurchaseThinking();
+	local npcBot = GetBot();
+
+	if ( #ItemsToBuy == 0 )
+	then
+        --print( "first if is called" );
+		npcBot:SetNextItemPurchaseValue( 0 );
+		return;
+	end;
+
+	local sNextItem = ItemsToBuy[1];
+
+	npcBot:SetNextItemPurchaseValue( GetItemCost( sNextItem ) );
+
+	if ( npcBot:GetGold() >= GetItemCost( sNextItem ) )
+	then
+        --print( "second if is called" );
+        if ( IsItemPurchasedFromSecretShop( sNextItem ) )
+        then
+            --do smthg
+        else
+			npcBot:ActionImmediate_PurchaseItem( sNextItem );
+			table.remove( ItemsToBuy, 1 );
+        end;
+	end;
 	
 end;
 
