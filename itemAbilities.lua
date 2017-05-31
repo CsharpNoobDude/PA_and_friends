@@ -30,6 +30,8 @@ function module.courier()
 		else
 			npcBot:Action_UseAbility( GetItemByName( "item_courier" ) );
 		end;
+	else
+		return;
 	end;
 end;
 

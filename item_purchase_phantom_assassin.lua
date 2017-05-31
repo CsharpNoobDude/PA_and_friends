@@ -52,7 +52,7 @@ function ItemPurchaseThink()
 	if ( npcBot:GetGold() >= GetItemCost( sNextItem ) )
 	then
         --print( "second if is called" );
-        if ( IsItemPurchasedFromSecretShop( sItemName ) )
+        if ( IsItemPurchasedFromSecretShop( sNextItem ) )
         then
             --do smthg
         else

@@ -97,7 +97,7 @@ function ConsiderStiflingDagger()
 	--while fighting
 	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
 	then
-		if ( nLowestHeroHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget )
+		if ( nLowestHeroHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget ( WeakestEnemy ) )
 		then
 			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
 		end;
@@ -122,7 +122,7 @@ function ConsiderPhantomStrike()
 	local npcBot = GetBot();
 
 	-- Make sure it's castable
-	if ( not abilityStiflingDagger:IsFullyCastable() ) 
+	if ( not abilityPhantomStrike:IsFullyCastable() ) 
 	then 
 		return BOT_ACTION_DESIRE_NONE, nil;
 	end;
@@ -150,7 +150,7 @@ function ConsiderPhantomStrike()
 	--while fighting
 	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
 	then
-		if ( nLowestHeroHitPoints * 0.95 < nDamage )
+		if ( nLowestHeroHitPoints * 0.95 < nDamage and CanCastPhantomStrikeOnTarget ( WeakestEnemy ) )
 		then
 			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
 		end;
