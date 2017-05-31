@@ -50,7 +50,7 @@ function module.GetStrongestUnit(EnemyUnits)
     return StrongestUnit, HighestHealth;
 end;
 
-function CheckItemByName ( ItemName )
+function module.CheckItemByName ( ItemName )
 
 	local npcBot = GetBot();   
 	
