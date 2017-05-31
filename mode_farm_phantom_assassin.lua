@@ -1,7 +1,7 @@
 utility = require(GetScriptDirectory() ..  "/utilityFunctions");
 
 function GetDesire() 
-    if ( utility.BotHasItem( "item_bfury" ) )
+    if ( utility.CheckItemByName( "item_bfury" ) )
     then
         return BOT_MODE_DESIRE_HIGH;
     else
