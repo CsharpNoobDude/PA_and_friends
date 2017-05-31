@@ -65,7 +65,7 @@ function ConsiderStiflingDagger()
 	-- Make sure it's castable
 	if ( not abilityStiflingDagger:IsFullyCastable() ) 
 	then 
-		return BOT_ACTION_DESIRE_NONE, nil;
+		return BOT_ACTION_DESIRE_NONE, 0;
 	end;
 	
 	-- Get some of its values
@@ -83,7 +83,7 @@ function ConsiderStiflingDagger()
 	--while laning or farming
 	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING )
 	then
-		if ( nLowestCreepHitPoints * 1 < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
+		if ( nLowestCreepHitPoints < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -113,7 +113,7 @@ function ConsiderStiflingDagger()
 		end;
 	end;
 	
-	return BOT_ACTION_DESIRE_NONE, nil;
+	return BOT_ACTION_DESIRE_NONE, 0;
 end;
 
 
@@ -124,7 +124,7 @@ function ConsiderPhantomStrike()
 	-- Make sure it's castable
 	if ( not abilityPhantomStrike:IsFullyCastable() ) 
 	then 
-		return BOT_ACTION_DESIRE_NONE, nil;
+		return BOT_ACTION_DESIRE_NONE, 0;
 	end;
 	
 	-- Get some of its values
@@ -140,7 +140,7 @@ function ConsiderPhantomStrike()
 	--while laning or farming
 	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING )
 	then
-		if ( nLowestCreepHitPoints * 1 < nDamage and CanCastPhantomStrikeOnTarget( WeakestCreep ) )
+		if ( nLowestCreepHitPoints < nDamage and CanCastPhantomStrikeOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -157,5 +157,5 @@ function ConsiderPhantomStrike()
 		return BOT_ACTION_DESIRE_LOW, WeakestEnemy;
 	end;
 	
-	return BOT_ACTION_DESIRE_NONE, nil;
+	return BOT_ACTION_DESIRE_NONE, 0;
 end;

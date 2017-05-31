@@ -1,7 +1,3 @@
 Phantom Assassin:
--Only using dagger while farming on creeps;
--Harass during laning;
--Use Phantom strike to escape;
--add mana checks;
--laning until bfury
--jungling / farming priority
+-laning / change lane if enemy team pushing
+-jungling
