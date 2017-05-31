@@ -74,16 +74,16 @@ function ConsiderStiflingDagger()
 	local nLowestCreepHitPoints = 100000;
 	local nLowestHeroHitPoints = 100000;
 	local creeps = npcBot:GetNearbyCreeps( nCastRange + 300, true);
-	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit(creeps);
+	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit( creeps );
 	local enemies = npcBot:GetNearbyHeroes( nCastRange + 300, true, BOT_MODE_NONE );
-	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit(enemies);
+	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit( enemies );
     
 
 	
 	--while laning or farming
-	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN)
+	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING )
 	then
-		if ( nLowestCreepHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
+		if ( nLowestCreepHitPoints * 1 < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -128,19 +128,19 @@ function ConsiderPhantomStrike()
 	end;
 	
 	-- Get some of its values
-	local nDamage = 3 * npcBot:GetAttackDamage();		--should be 4 * , but that is unlikely. (phantom_assassin_phantom_strike adds 4 very fast attacks)
+	local nDamage = 4 * npcBot:GetAttackDamage();		--should be 3 * , if that is too unlikely. (phantom_assassin_phantom_strike adds 4 very fast attacks)
 	local nCastRange = abilityPhantomStrike:GetCastRange();
 	local nLowestCreepHitPoints = 100000;
 	local nLowestHeroHitPoints = 100000;
 	local creeps = npcBot:GetNearbyCreeps( nCastRange + 300, true);
-	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit(creeps);
+	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit( creeps );
 	local enemies = npcBot:GetNearbyHeroes( nCastRange + 300, true, BOT_MODE_NONE );
-	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit(enemies);
+	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit( enemies );
 	
 	--while laning or farming
-	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN )
+	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING )
 	then
-		if ( nLowestCreepHitPoints * 0.95 < nDamage and CanCastPhantomStrikeOnTarget( WeakestCreep ) )
+		if ( nLowestCreepHitPoints * 1 < nDamage and CanCastPhantomStrikeOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -150,7 +150,7 @@ function ConsiderPhantomStrike()
 	--while fighting
 	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
 	then
-		if ( nLowestHeroHitPoints * 0.95 < nDamage and CanCastPhantomStrikeOnTarget ( WeakestEnemy ) )
+		if ( nLowestHeroHitPoints * 1.05 < nDamage and CanCastPhantomStrikeOnTarget ( WeakestEnemy ) )
 		then
 			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
 		end;
