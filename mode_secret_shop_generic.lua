@@ -51,7 +51,7 @@ function Think()
 		if GetUnitToLocationDistance(npcBot, DIRE_SECRET_SHOP) <= 2000 then
 			npcBot:Action_MoveToLocation(DIRE_SECRET_SHOP);
 			return;
-		else;
+		else
 			npcBot:Action_MoveToLocation(RAD_SECRET_SHOP);
 			return;
 		end;

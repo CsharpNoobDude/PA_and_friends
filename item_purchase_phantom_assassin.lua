@@ -1,7 +1,10 @@
+----------------------------------------------------------------------------------------------------
 
-
-local tableItemsToBuy = { 
-				"item_tango"
+local ItemsToBuy = { 
+				"item_tango",
+                "item_flask",
+                "item_clarity",
+                "item_clarity",
 				"item_stout_shield",
 				"item_quelling_blade",
 				"item_ring_of_health",
@@ -35,22 +38,28 @@ function ItemPurchaseThink()
 
 	local npcBot = GetBot();
 
-	if ( #tableItemsToBuy == 0 )
+	if ( #ItemsToBuy == 0 )
 	then
+        --print( "first if is called" );
 		npcBot:SetNextItemPurchaseValue( 0 );
 		return;
-	end
+	end;
 
-	local sNextItem = tableItemsToBuy[1];
+	local sNextItem = ItemsToBuy[1];
 
 	npcBot:SetNextItemPurchaseValue( GetItemCost( sNextItem ) );
 
 	if ( npcBot:GetGold() >= GetItemCost( sNextItem ) )
 	then
-		npcBot:Action_PurchaseItem( sNextItem );
-		table.remove( tableItemsToBuy, 1 );
-	end
-
-end
+        --print( "second if is called" );
+        if ( IsItemPurchasedFromSecretShop( sItemName ) )
+        then
+            --do smthg
+        else
+		npcBot:ActionImmediate_PurchaseItem( sNextItem );
+		table.remove( ItemsToBuy, 1 );
+        end;
+	end;
+end;
 
 ----------------------------------------------------------------------------------------------------

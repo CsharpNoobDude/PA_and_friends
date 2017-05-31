@@ -1,7 +1,9 @@
 castStiflingDaggerDesire = 0;
 castPhantomStrikeDesire = 0;
 
-require(GetScriptDirectory() ..  "/utilityFunctions");
+utility = require(GetScriptDirectory() ..  "/utilityFunctions");
+
+
 
 function AbilityUsageThink()
 
@@ -13,7 +15,7 @@ function AbilityUsageThink()
 		return nil;
 	end;
 	
-	abilityStiflingDagger = npcBot:GetAbilityByName( "phantom_asssassin_stifling_dagger" );
+	abilityStiflingDagger = npcBot:GetAbilityByName( "phantom_assassin_stifling_dagger" );
 	abilityPhantomStrike = npcBot:GetAbilityByName( "phantom_assassin_phantom_strike" );
 	
 	-- Consider using each ability
@@ -36,11 +38,20 @@ end;
 ----------------------------------------------------------------------------------------------------
 
 function CanCastStiflingDaggerOnTarget( npcTarget )
+
+    if ( npcTarget == nil )
+    then 
+        return false;
+    end;
 	return npcTarget:CanBeSeen() and not npcTarget:IsMagicImmune() and not npcTarget:IsInvulnerable();
 end;
 
 
 function CanCastPhantomStrikeOnTarget( npcTarget )
+    if ( npcTarget == nil )
+    then 
+        return false;
+    end;
 	return npcTarget:CanBeSeen() and npcTarget:IsHero() and not npcTarget:IsMagicImmune() and not npcTarget:IsInvulnerable();
 end;
 
@@ -58,19 +69,21 @@ function ConsiderStiflingDagger()
 	end;
 	
 	-- Get some of its values
-	local nDamage = 65+npcBot:GetAttackDamage()*(0.1+0.15*ability:GetLevel());			-- thanks to shutnik
-	local nCastRange = ability:GetCastRange();
-	--local nlowestCreepHitPoints = 100000;
-	--local nlowestHeroHitPoints = 100000;
-	local creeps = npcBot:GetNearbyCreeps(CastRange+300, true);
-	local WeakestCreep, CreepHealth=utilityFunctions.GetWeakestUnit(creeps);
-	local enemies = npcBot:GetNearbyHeroes(CastRange+300, true, BOT_MODE_NONE);
-	local WeakestEnemy, HeroHealth=utilityFunctions.GetWeakestUnit(enemies);
+	local nDamage = abilityStiflingDagger:GetSpecialValueInt( "base_damage" ) + abilityStiflingDagger:GetSpecialValueInt( "attack_factor_tooltip" ) / 100 * npcBot:GetAttackDamage();
+	local nCastRange = abilityStiflingDagger:GetCastRange();
+	local nLowestCreepHitPoints = 100000;
+	local nLowestHeroHitPoints = 100000;
+	local creeps = npcBot:GetNearbyCreeps( nCastRange + 300, true);
+	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit(creeps);
+	local enemies = npcBot:GetNearbyHeroes( nCastRange + 300, true, BOT_MODE_NONE );
+	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit(enemies);
+    
+
 	
 	--while laning or farming
 	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN)
 	then
-		if ( creepHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget(WeakestCreep) )
+		if ( nLowestCreepHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -84,17 +97,17 @@ function ConsiderStiflingDagger()
 	--while fighting
 	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
 	then
-		if ( HeroHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget )
+		if ( nLowestHeroHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget )
 		then
 			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
 		end;
 		
-		if ( creepHealth*1.05 < nDamage and CanCastStiflingDaggerOnTarget(WeakestCreep) )
+		if ( nLowestCreepHitPoints * 1.05 < nDamage and CanCastStiflingDaggerOnTarget( WeakestCreep ) )
 		then
-			BOT_ACTION_DESIRE_LOW, WeakestCreep;
+			return BOT_ACTION_DESIRE_LOW, WeakestCreep;
 		end;
 		
-		if ( CanCastStiflingDaggerOnTarget(WeakestEnemy) )
+		if ( CanCastStiflingDaggerOnTarget( WeakestEnemy ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestEnemy;
 		end;
@@ -115,19 +128,19 @@ function ConsiderPhantomStrike()
 	end;
 	
 	-- Get some of its values
-	local nDamage = 4*npcBot:GetAttackDamage();
-	local nCastRange = ability:GetCastRange();
-	--local nlowestCreepHitPoints = 100000;
-	--local nlowestHeroHitPoints = 100000;
-	local creeps = npcBot:GetNearbyCreeps(CastRange+300, true);
-	local WeakestCreep,CreepHealth=logic.GetWeakestUnit(creeps);
-	local enemys = npcBot:GetNearbyHeroes(CastRange+300, true, BOT_MODE_NONE);
-	local WeakestEnemy,HeroHealth=logic.GetWeakestUnit(enemys);
+	local nDamage = 3 * npcBot:GetAttackDamage();		--should be 4 * , but that is unlikely. (phantom_assassin_phantom_strike adds 4 very fast attacks)
+	local nCastRange = abilityPhantomStrike:GetCastRange();
+	local nLowestCreepHitPoints = 100000;
+	local nLowestHeroHitPoints = 100000;
+	local creeps = npcBot:GetNearbyCreeps( nCastRange + 300, true);
+	local WeakestCreep, nLowestCreepHitPoints = utility.GetWeakestUnit(creeps);
+	local enemies = npcBot:GetNearbyHeroes( nCastRange + 300, true, BOT_MODE_NONE );
+	local WeakestEnemy, nLowestHeroHitPoints = utility.GetWeakestUnit(enemies);
 	
 	--while laning or farming
 	if ( npcBot:GetActiveMode() == BOT_MODE_FARM or npcBot:GetActiveMode() == BOT_MODE_LANING_ROSHAN )
 	then
-		if ( creepHealth*0.95 < nDamage and CanCastPhantomStrikeOnTarget(WeakestCreep) )
+		if ( nLowestCreepHitPoints * 0.95 < nDamage and CanCastPhantomStrikeOnTarget( WeakestCreep ) )
 		then
 			return BOT_ACTION_DESIRE_MEDIUM, WeakestCreep;
 		end;
@@ -135,14 +148,14 @@ function ConsiderPhantomStrike()
 	end;
 	
 	--while fighting
-	--if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
-	--then
-		--if ( HeroHealth*0.95 < nDamage )
-		--then
-			--return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
-		--end;
-		--return BOT_ACTION_DESIRE_MEDIUM, WeakestEnemy;
-	--end;
+	if ( npcBot:GetActiveMode() == BOT_MODE_ATTACK or npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY )
+	then
+		if ( nLowestHeroHitPoints * 0.95 < nDamage )
+		then
+			return BOT_ACTION_DESIRE_HIGH, WeakestEnemy;
+		end;
+		return BOT_ACTION_DESIRE_LOW, WeakestEnemy;
+	end;
 	
 	return BOT_ACTION_DESIRE_NONE, nil;
 end;
