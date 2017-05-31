@@ -56,13 +56,15 @@ function CheckItemByName ( ItemName )
 	
 	for i= 0,5 do
 		local sCurItem = npcBot:GetItemInSlot( i );
-		if ( sCurItem ~= nil ) then
+		if ( sCurItem ~= nil )
+		then
 			local iName = sCurItem:GetName();
-				if ( iName == ItemName ) then
+			if ( iName == ItemName ) 
+			then
 				return true;
-				end;
 			end;
-		end;  
+		end;
+	end;  
 		
 	return false;
 end;
